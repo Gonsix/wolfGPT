@@ -1,0 +1,6 @@
+streamlit
+pandas
+openai
+langchain
+duckduckgo-search
+wikipedia
