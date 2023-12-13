@@ -4,3 +4,4 @@ openai
 langchain
 duckduckgo-search
 wikipedia
+llama-index
