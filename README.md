@@ -5,4 +5,4 @@ Q&A chatBot for wolfSSL using RAG(LlamaIndex)
 
 NOTE:
 
-You need to get an OPENAI_API_KEY and export it.
+You need to get an OPENAI_API_KEY and export it if you would like to run the app locally.
