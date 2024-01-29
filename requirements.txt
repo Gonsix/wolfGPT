@@ -1,0 +1,9 @@
+streamlit
+langchain
+langchain-openai
+langchain-community
+semantic-router
+watchdog
+bs4
+chromadb
+pypdf
