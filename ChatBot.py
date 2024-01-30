@@ -39,6 +39,8 @@ rag_chain = (
     | StrOutputParser()
 )
 
+st.title("Chat wolfSSL")
+st.caption("🚀 Document Retrieval chatbot powered by OpenAI GPT-4 turbo")
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = [ChatMessage(role="assistant", content="How can I help you?")]
