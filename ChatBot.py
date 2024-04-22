@@ -12,8 +12,11 @@ from langchain_core.runnables import RunnablePassthrough
 
 from streamlit_callback import StreamHandler
 from retriever import get_retriever
+from router import get_router
+from logger import get_logger
 
 
+logger = get_logger()
 
 WOLFSSL_ICON_PATH = './image/wolfssl-icon.png'
 
@@ -24,8 +27,11 @@ RAG_TEMPLATE = """Answer the question based only on the following context:
 Question: {question}
 """
 
+
+
 prompt = ChatPromptTemplate.from_template(RAG_TEMPLATE)
 retriever = get_retriever()
+router = get_router()
 llm = ChatOpenAI(streaming=True, model='gpt-4-turbo-preview')
 
 
@@ -51,13 +57,24 @@ for msg in st.session_state.messages:
     else:
         st.chat_message('user').write(msg.content)
 
-if prompt := st.chat_input():
-    st.session_state.messages.append(ChatMessage(role="user", content=prompt))
-    st.chat_message("user").write(prompt)
+if usr_query := st.chat_input():
+    st.session_state.messages.append(ChatMessage(role="user", content=usr_query))
+    st.chat_message("user").write(usr_query)
 
 
     with st.chat_message("assistant", avatar=WOLFSSL_ICON_PATH):
-        stream_handler = StreamHandler(st.empty()) # Stream handler should be created everytime before chian.invoke()
-        response = rag_chain.invoke(prompt, {"callbacks": [stream_handler]})
+        # logger.debug(f'route: {router(prompt)}')    
+        query_type = router(usr_query).name
+        # print('route: ', router(prompt).name)    
+        logger.info(f"Router: decided to route {query_type}")
+        if query_type is None:
 
+            response = "Hmm, I'm not sure 🤐"
+            st.write(response)
+
+        else:
+            stream_handler = StreamHandler(st.empty()) # Stream handler should be created everytime before chian.invoke()
+            response = rag_chain.invoke(usr_query, {"callbacks": [stream_handler]})
+
+        # print("response: ", response)
         st.session_state.messages.append(ChatMessage(role="assistant", content=response))
